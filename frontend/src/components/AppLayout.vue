@@ -9,7 +9,7 @@
 
         <div class="flex-1">
 
-            <TopHeader @toggle-sidebar="toggleSidebar"/>
+            <NavBar @toggle-sidebar="toggleSidebar"/>
 
             <main class="p-6">
                 <router-view></router-view>
@@ -20,9 +20,9 @@
 
 <script setup>
 
-import {ref} from "vue";
+import {ref, onMounted, onUnmounted} from "vue";
 import Sidebar from './Sidebar.vue';
-import TopHeader from './TopHeader.vue';
+import NavBar from './NavBar.vue';
 
 const { title } = defineProps({
     title: String
@@ -34,6 +34,21 @@ function toggleSidebar(){
     sidebarOpened.value = !sidebarOpened.value
 }
 
+onMounted(() => {
+    handleSidebarOpened();
+    window.addEventListener('resize', handleSidebarOpened)
+})
+
+onUnmounted(() =>{
+    window.addEventListener('resize', handleSidebarOpened)
+})
+
+
+function handleSidebarOpened(){
+
+    sidebarOpened.value = window.outerWidth > 768;
+
+}
 
 </script>
 
